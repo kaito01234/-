@@ -1,0 +1,31 @@
+# GitHub Actionsでissueがcloseされたとき、issueの内容をPushする
+name: Close issue
+
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  close-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Write issue to file
+        run: |
+          echo "${ISSUE_BODY}" > ${ISSUE_TITLE}.txt
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+
+      - name: Close Issue
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "add ${ISSUE_TITLE}.txt"
+          git push
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+```
