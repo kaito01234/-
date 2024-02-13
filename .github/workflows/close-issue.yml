@@ -28,4 +28,3 @@ jobs:
           git push
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
-```
