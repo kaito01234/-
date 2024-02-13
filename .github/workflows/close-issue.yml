@@ -1,9 +1,13 @@
 # GitHub Actionsでissueがcloseされたとき、issueの内容をPushする
-name: Close issue
+name: close issue
 
 on:
   issues:
     types: [closed]
+
+env:
+  USER_NAME: kaito01234
+  USER_EMAIL: 43839796+kaito01234@users.noreply.github.com
 
 jobs:
   close-issue:
@@ -17,15 +21,16 @@ jobs:
       - name: Write issue to file
         run: |
           ISSUE_TITLE_SAFE=$(echo "${ISSUE_TITLE}" | tr './:\\~^*?[]@{-' '_')
-          echo "${ISSUE_BODY}" > "${ISSUE_TITLE_SAFE}.txt"
+          echo "${ISSUE_BODY}" > "${ISSUE_TITLE_SAFE}.md"
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
+        working-directory: ./app1
 
-      - name: Close Issue
+      - name: Push file
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name ${USER_NAME}
+          git config --global user.email ${USER_EMAIL}
           git add .
           git commit -m "add ${ISSUE_TITLE}"
           git push
