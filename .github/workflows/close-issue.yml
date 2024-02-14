@@ -18,7 +18,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check if file exists and issue body is not empty
+        run: |
+          ISSUE_TITLE_SAFE=$(echo "${ISSUE_TITLE}" | tr './:\\~^*?[]@{-' '_')
+          echo "SKIP=false" >> $GITHUB_ENV
+          if [[ -f "${ISSUE_TITLE_SAFE}.md" ]] || [[ -z "${ISSUE_BODY}" ]]; then
+            echo "SKIP=true" >> $GITHUB_ENV
+          fi
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+
       - name: Write issue to file
+        if: env.SKIP == 'false'
         run: |
           ISSUE_TITLE_SAFE=$(echo "${ISSUE_TITLE}" | tr './:\\~^*?[]@{-' '_')
           echo "${ISSUE_BODY}" > "${ISSUE_TITLE_SAFE}.md"
@@ -28,6 +40,7 @@ jobs:
         working-directory: ./nikki
 
       - name: Push file
+        if: env.SKIP == 'false'
         run: |
           git config --global user.name ${USER_NAME}
           git config --global user.email ${USER_EMAIL}
