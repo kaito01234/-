@@ -18,6 +18,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Echo GitHub Parameter
+        run: echo "${{ toJSON(github) }}"
+
       - name: Write issue to file
         run: |
           ISSUE_TITLE_SAFE=$(echo "${ISSUE_TITLE}" | tr './:\\~^*?[]@{-' '_')
