@@ -14,17 +14,16 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
+    if: github.actor == 'kaito01234'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Echo GitHub Parameter
-        run: echo "${{ toJSON(github) }}"
 
       - name: Write issue to file
         run: |
           ISSUE_TITLE_SAFE=$(echo "${ISSUE_TITLE}" | tr './:\\~^*?[]@{-' '_')
           echo "${ISSUE_BODY}" > "${ISSUE_TITLE_SAFE}.md"
+          cat "${ISSUE_TITLE_SAFE}.md"
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}

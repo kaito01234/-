@@ -1,0 +1,10 @@
+{
+  "action": "closed",
+  "issue": {
+    "body": "# level1\r\n\r\n## level2\r\n\r\n- level3\r\n",
+    "title": "Check",
+    "sender": {
+      "login": "kaito01234"
+    }
+  }
+}
