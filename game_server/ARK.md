@@ -74,3 +74,6 @@ UDP 27015
 
 ## セーブデータ
 /opt/steam/ARK/ShooterGame/Saved/SavedArks/
+
+## サーバー接続
+https://kobayashi-ojisan.com/ark-server-how-to-make/#index_id13
