@@ -1,0 +1,34 @@
+[unit]
+## サービスの説明を記載する。
+Description=ARK: Survival Evolved dedicated server
+Wants=network-online.target
+After=syslog.target network.target nss-lookup.target network-online.target
+
+[Service]
+Type=simple
+Restart=no
+StartLimitBurst=3
+
+## 実行時ユーザー名とグループを指定する
+User=steam
+Group=steam
+
+## サーバー起動前にアップデートをする。force_install_dirは環境に応じて変更する。
+ExecStartPre=/usr/games/steamcmd +force_install_dir "/opt/steam/ARK" +login anonymous +app_update 376030 +quit
+
+## サーバーを起動する。ここの起動オプションは環境に応じて変更する。
+ExecStart=/opt/steam/ARK/ShooterGame/Binaries/Linux/ShooterGameServer TheIsland?listen?SessionName=ARKServer?ServerPassword={Password}?ServerAdminPassword={AdminPassword} -server -log
+
+LimitNOFILE=100000
+
+## 作業ディレクトリを指定する。実際にARKサーバープログラムがあるディレクトリをフルパスで指定する。
+WorkingDirectory=/opt/steam/ARK/ShooterGame/Binaries/Linux
+
+## サービスをリロードするときのコマンド
+ExecReload=/bin/kill -s HUP $MAINPID
+
+## サービスをストップするときのコマンド
+ExecStop=/bin/kill -s INT $MAINPID
+
+[Install]
+WantedBy=multi-user.target
