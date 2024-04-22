@@ -27,7 +27,7 @@ jobs:
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
-        working-directory: ./nikki
+        working-directory: ./diary
 
       - name: Push file
         run: |
